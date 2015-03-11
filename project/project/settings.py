@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+DIRNAME = os.path.dirname(__file__)
+
+MEDIA_ROOT = os.path.join(DIRNAME, '..', 'media')
+STATIC_ROOT = os.path.join(DIRNAME, '..', "static")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -37,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
     'pokemon',
 )
 
@@ -50,18 +56,53 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.static',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
+    'django.contrib.auth.context_processors.auth',
+)
+
 ROOT_URLCONF = 'project.urls'
 
 WSGI_APPLICATION = 'project.wsgi.application'
+
+TEMPLATE_DIRS = (
+    os.path.join(DIRNAME, 'templates'),
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+STATICFILES_DIRS = (
+    os.path.join(DIRNAME, 'static'),
+)
 
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+DATABASE_NAME = "pokeapi"
+DATABASE_PASSWORD = "TuTKaAUjuSqJvtNJ"
+DATABASE_USER = "pokeapi"
+DEFAULT_CONTACT_EMAIL = "Ridley Larsen <ridley@velocitywebworks.com>"
+DEFAULT_FROM_EMAIL = "Ridley Larsen <ridley@velocitywebworks.com>"
+SECRET_KEY = "m5%7opq42mrqqg7&1f735py%8+usu=7t#1beu-714k)vf7+vy@"
+TIME_ZONE = "America/Denver"
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
+        'HOST': '10.0.0.254',
+        'PORT': '',
     }
 }
 

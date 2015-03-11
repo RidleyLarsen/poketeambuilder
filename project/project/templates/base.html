@@ -1,0 +1,330 @@
+{% load staticfiles %}
+
+<!doctype html>
+<html ng-app="pokemon">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>PokeTeam</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <style>
+          body {
+            padding-top: 50px;
+          }
+          .sprite {
+            max-width: 100%;
+            min-height: 90px;
+          }
+          .container {
+            padding-bottom: 20px;
+          }
+          .panel-heading {
+            cursor: pointer;
+          }
+          .poketeam {
+            position: fixed;
+            bottom: 0;
+            height: 20vh;
+            width: 100%;
+            background-color: rgb(255, 255, 255);
+            border-top: 1px solid #ddd;
+            z-index: 999;
+          }
+          .poketeam h3 {
+            font-size: 1em;
+            padding: 0;
+            margin: 0;
+          }
+          .poketeam.minimize {
+            height: 5vh;
+          }
+          .team-member {
+            padding: 15px;
+          }
+          .team-analysis {
+            position: fixed;
+            top: 0;
+            height: 80vh;
+            width: 100%;
+            background-color: rgb(255, 255, 255);
+            z-index: 999;
+          }
+          .team-options, .team-options div {
+            padding: 15px;
+          }
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="jumbotron">
+                <h1>Welcome to Poké-Team Builder!</h1>
+                <p>Welcome to Zombocom. You can do anything at zombocom.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% verbatim %}
+      <div ng-controller="PokemonController">
+        <div class="container" ng-view>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Find a pokemon.."
+                  ng-model="filters.name">
+                <span class="input-group-btn">
+                  <button
+                    class="btn btn-primary"
+                    ng-class="{disabled: !filters.name}"
+                    ng-click="clearFilters()">
+                      Clear Filters
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container" ng-view>
+          <div class="row" infinite-scroll='loadMore()' infinite-scroll-distance='2'>
+            <div class="col-md-3 col-sm-6 col-xs-12" id="pkmn-{{pkmn.national_id}}" ng-repeat="pkmn in pokemon" ng-controller="FilterController" ng-show="pkmn.visible">
+              <div class="panel panel-default">
+                <div class="panel-heading" ng-click="addRemovePokemon(pkmn.national_id)">
+                  <h3 class="panel-title">#{{pkmn.national_id}} {{ pkmn.name }} <span class="pull-right"><i class="fa fa-plus"></i></span></h3>
+                </div>
+                <div class="panel-body">
+                  <div class="col-xs-6">
+                    <img class="sprite img img-responsive" src="{{ pkmn.sprite_url }}">
+                  </div>
+                  <div class="col-xs-6">
+                    <p>
+                      <span ng-repeat="type in pkmn.types">
+                        {{ type.name }}<span ng-if="!($last)">,</span>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container team-analysis" ng-show="show_analysis">
+          <div class="row">
+            <div class="col-xs-12">
+              <h1>Your Team</h1>
+            </div>
+            <div class="col-xs-12">
+              <div class="col-xs-2" ng-repeat="pkmn in party_pokemon">
+                {{ pkmn.name }}
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <h1>Your Types</h1>
+              <p ng-repeat="type in party_types">
+                {{ type.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="container poketeam" ng-show="party_pokemon.length > 0">
+          <div class="row">
+            <div class="col-xs-12 team-options">
+              <button class="btn btn-primary" ng-click="clearTeam()">
+                Clear Team
+              </button>
+              <button class="btn btn-primary" ng-click="show_analysis = !show_analysis">
+                Show Analysis
+              </button>
+            </div>
+            <div class="col-xs-12">
+              <div class="col-xs-2 team-member" ng-repeat="pkmn in party_pokemon">
+                <div class="panel panel-primary">
+                  <div class="panel-heading" ng-click="addRemovePokemon(pkmn.national_id)">
+                    <h3>{{ pkmn.name }} <span class="pull-right"><i class="fa fa-trash"></i></span></h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endverbatim %}
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js"></script>
+        <script src="//code.angularjs.org/1.3.13/angular-resource.js"></script>
+        <script src="{% static 'js/angular-infinite-scroll.min.js' %}"></script>
+        <script src="{% static 'js/spin.min.js' %}"></script>
+        <script>
+          var app = angular.module('pokemon', ['ngResource', 'infinite-scroll',]);
+
+          app.controller('PokemonController', [
+            '$scope',
+            '$http',
+            function ($scope, $http) {
+            $scope.filters = {
+              'name': "",
+              'id': "",
+            };
+            $scope.types = {};
+            $http.get('/pokemon/type/').then(function (result) {
+              angular.forEach(result.data, function (item) {
+                $scope.types[item.id] = item;
+              });
+            });
+
+            $scope.pokemon = [];
+            $scope.visible_pokemon = 0;
+            $scope.party_pokemon = [];
+            $scope.show_analysis = false;
+            $scope.party_types = [];
+
+            function addPokemonToTeam(id) {
+              $scope.party_pokemon.push($scope.pokemon[id - 1]);
+              $('#pkmn-' + id + ' .panel').removeClass('panel-default').addClass('panel-success');
+              $('#pkmn-' + id + ' .fa').removeClass('fa-plus').addClass('fa-minus');
+              $scope.party_types = $scope.getTypes();
+            }
+
+            function removePokemonFromTeam(id) {
+              $('#pkmn-' + id + ' .panel').removeClass('panel-success').addClass('panel-default');
+              $('#pkmn-' + id + ' .fa').removeClass('fa-minus').addClass('fa-plus');
+              $scope.party_pokemon.splice($scope.party_pokemon.indexOf($scope.pokemon[id - 1]), 1);
+              $scope.party_types = $scope.getTypes();
+            }
+
+            $scope.clearTeam = function () {
+              $scope.party_pokemon = [];
+              $('.panel-success').removeClass('panel-success').addClass('panel-default');
+            }
+
+            $scope.addRemovePokemon = function (id) {
+              if ($scope.party_pokemon.length < 6) {
+                if ($scope.party_pokemon.indexOf($scope.pokemon[id - 1]) < 0) {
+                  addPokemonToTeam(id);
+                }
+                else {
+                  removePokemonFromTeam(id);
+                }
+              }
+              else {
+                if ($('#pkmn-' + id + ' .panel').hasClass('panel-success')) {
+                  removePokemonFromTeam(id);
+                }
+              }
+            };
+
+            $scope.getTypes = function () {
+              types = [];
+              angular.forEach($scope.party_pokemon, function (pkmn) {
+                console.log(pkmn.types);
+                for (var i = pkmn.types.length - 1; i >= 0; i--) {
+                  if (types.indexOf(pkmn.types[i]) < 0) {
+                    types.push(pkmn.types[i]);
+                  }
+                }
+              });
+              return types;
+            };
+
+            $scope.loadMore = function() {
+              console.log('whats goin on', $scope.visible_pokemon);
+              pkmn = $scope.pokemon.slice($scope.visible_pokemon, $scope.visible_pokemon + 16);
+              // console.log($scope.pokemon, pkmn);
+              for (var i = 15; i >= 0; i--) {
+                try {
+                  pkmn[i].visible = true;
+                }
+                catch (e) {}
+                // console.log(pkmn[i]);
+              }
+              if ($scope.visible_pokemon < $scope.pokemon.length){
+                $scope.visible_pokemon += 16;
+              }
+            };
+
+            $http.get('/pokemon/pokemon/').then(function (result) {
+              angular.forEach(result.data, function (item) {
+                types = [];
+                // console.log(item.types);
+                for (var i = item.types.length - 1; i >= 0; i--) {
+                  // console.log(item.types[i]);
+                  types.push($scope.types[item.types[i]]);
+                }
+                item.types = types;
+                // console.log(types);
+                item.sprite_url = "http://pokeapi.co" + item.sprite_img;
+                item.visible = false;
+                $scope.pokemon.push(item);
+              });
+              // console.log($scope.types);
+              $scope.loadMore();
+            });
+            $scope.clearFilter = function() {
+              $scope.filters.name = "";
+            };
+
+            $scope.$on('$viewContentLoaded', function(){
+              console.log('farts');
+            });
+
+          }]);
+
+          app.controller('FilterController', function ($scope) {
+            $scope.visible_or_filtered = applySearchFilter();
+            $scope.$watch("filters.name", function (newName, oldName) {
+              if (newName === oldName || (newName.length < 3 && newName !== "")) {
+                $scope.$parent.$parent.visible_pokemon = 16;
+                return;
+              }
+              applySearchFilter();
+            });
+            function applySearchFilter() {
+              var filter = $scope.filters.name.toLowerCase();
+              if (filter.length === 0) {
+                $scope.pkmn.visible = ($scope.pkmn.national_id <= $scope.$parent.visible_pokemon);
+              }
+              else {
+                var name = $scope.pkmn.name.toLowerCase();
+                var isSubstring = (name.indexOf(filter) !== -1);
+                $scope.pkmn.visible = isSubstring;
+              }
+
+              // else {
+
+              //     console.log("if (filter.length === 0) {");
+
+              //   }
+              //   else {
+              //     console.log("else {");
+              //     $scope.visible_or_filtered = false;
+              //   }
+                // if (Number($scope.pkmn.national_id) > $scope.$parent.$parent.$visible_pokemon) {
+                //   $scope.visible_or_filtered = true;
+                // }
+                // else {
+                //   $scope.visible_or_filtered = false;
+                // }
+              // }
+            }
+          });
+
+
+        </script>
+
+    </body>
+</html>

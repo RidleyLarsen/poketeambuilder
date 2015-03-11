@@ -1,0 +1,9 @@
+<html>
+  <body>
+    {% for pkmn in object_list %}
+      <p>
+        <img src="http://pokeapi.co{{ pkmn.sprite.image }}"> {{ pkmn.name }}
+      </p>
+    {% endfor %}
+  </body>
+</html>

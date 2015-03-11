@@ -28,7 +28,7 @@ class Pokemon(models.Model):
     egg_cycles = models.IntegerField(default=0)
     ev_yield = models.CharField(max_length=32)
     exp = models.IntegerField(default=0)
-    growth_rate = models.CharField(max_length=8)
+    growth_rate = models.CharField(max_length=32)
     male_female_ratio = models.CharField(max_length=16)
     happiness = models.IntegerField(default=0)
     height = models.CharField(max_length=16)
@@ -42,6 +42,14 @@ class Pokemon(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def sprite(self):
+        return Sprite.objects.get(pokemon=self)
+
+    @property
+    def sprite_img(self):
+        return self.sprite.image
+
 
 class PokemonEvolution(models.Model):
     from_pokemon = models.ForeignKey(Pokemon, related_name='from_pokemon')
@@ -53,7 +61,7 @@ class Ability(models.Model):
     api_modified = models.DateTimeField(null=True, blank=True)
     resource_uri = models.CharField(max_length=128)
     name = models.CharField(max_length=64)
-    description = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Ability"
@@ -86,6 +94,13 @@ class Type(models.Model):
         types = []
         for tr in TypeRelation.objects.filter(from_type__id=self.id, relation_type="ineffective"):
             types.append(tr.to_type)
+        return types
+
+    @property
+    def ineffective_types(self):
+        types = []
+        for tr in TypeRelation.objects.filter(from_type__id=self.id, relation_type="no_effect"):
+            types.append(tr.to_type.id)
         return types
 
     def get_no_effect_types(self):
@@ -124,7 +139,7 @@ class Move(models.Model):
     api_modified = models.DateTimeField(null=True, blank=True)
     resource_uri = models.CharField(max_length=128)
     name = models.CharField(max_length=64)
-    description = models.CharField(max_length=256, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     power = models.IntegerField(null=True, blank=True)
     accuracy = models.IntegerField(null=True, blank=True)
     category = models.CharField(max_length=32, null=True, blank=True)
