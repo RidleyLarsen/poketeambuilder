@@ -1,1 +1,0 @@
-project/manage.py

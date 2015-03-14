@@ -1,2 +1,4 @@
 venv-poketeambuilder/
 *.pyc
+static/
+

@@ -14,8 +14,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DIRNAME = os.path.dirname(__file__)
 
-MEDIA_ROOT = os.path.join(DIRNAME, '..', 'media')
-STATIC_ROOT = os.path.join(DIRNAME, '..', "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, '..', '..', "static")
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,11 +25,11 @@ STATIC_ROOT = os.path.join(DIRNAME, '..', "static")
 SECRET_KEY = 'pc0e!i9-t#t2=xdvl7n@2c&m)ho-3jai8er8&$a_0noa4yos8c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -71,7 +71,7 @@ ROOT_URLCONF = 'project.urls'
 WSGI_APPLICATION = 'project.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(DIRNAME, 'templates'),
+    os.path.join(DIRNAME, '..', 'templates'),
 )
 
 STATICFILES_FINDERS = (
@@ -80,7 +80,7 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_DIRS = (
-    os.path.join(DIRNAME, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 
@@ -102,6 +102,17 @@ DATABASES = {
         'USER': DATABASE_USER,
         'PASSWORD': DATABASE_PASSWORD,
         'HOST': '10.0.0.254',
+        'PORT': '',
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django',
+        'USER': 'django',
+        'PASSWORD': '6kUBGGKcYB',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }

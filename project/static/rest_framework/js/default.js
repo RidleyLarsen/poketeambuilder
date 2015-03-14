@@ -1,1 +1,1 @@
-/vagrant/sites/poketeambuilder/venv-poketeambuilder/local/lib/python2.7/site-packages/rest_framework/static/rest_framework/js/default.js
+/usr/local/lib/python2.7/dist-packages/rest_framework/static/rest_framework/js/default.js
