@@ -33,6 +33,12 @@
             background-color: rgb(255, 255, 255);
             border-top: 1px solid #ddd;
             z-index: 999;
+            transition-duration: 200ms;
+            transform: translateY(0%);
+          }
+          .poketeam.ng-hide {
+            display: block !important;
+            transform: translateY(100%);
           }
           .poketeam h3 {
             font-size: 1em;
@@ -52,6 +58,11 @@
             width: 100%;
             background-color: rgb(255, 255, 255);
             z-index: 999;
+            transition-duration: 500ms;
+          }
+          .team-analysis.ng-hide {
+            display: block !important;
+            transform: translateY(150%);
           }
           .team-options, .team-options div {
             padding: 15px;
@@ -146,7 +157,7 @@
                 Clear Team
               </button>
               <button class="btn btn-primary" ng-click="show_analysis = !show_analysis">
-                Show Analysis
+                <span ng-if="!show_analysis">Show</span><span ng-if="show_analysis">Hide</span> Analysis
               </button>
             </div>
             <div class="col-xs-12">
@@ -209,6 +220,8 @@
 
             $scope.clearTeam = function () {
               $scope.party_pokemon = [];
+              $scope.show_analysis = false;
+              $('.fa-minus').removeClass('fa-minus').addClass('fa-plus');
               $('.panel-success').removeClass('panel-success').addClass('panel-default');
             }
 
