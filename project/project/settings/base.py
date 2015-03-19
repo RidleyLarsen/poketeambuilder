@@ -1,5 +1,5 @@
 """
-Django settings for project project.
+Django settings for PokeTeamBuilder.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -8,29 +8,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+DEFAULT_CONTACT_EMAIL = "Ridley Larsen <ridley@" + "velocitywebworks.com>"
+DEFAULT_FROM_EMAIL = "Ridley Larsen <ridley@" + "velocitywebworks.com>"
+
+# Misc. Project Settings
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DIRNAME = os.path.dirname(__file__)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '..', '..', 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, '..', '..', "static")
+STATIC_URL = '/static/'
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pc0e!i9-t#t2=xdvl7n@2c&m)ho-3jai8er8&$a_0noa4yos8c'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = ['*',]
-
+ROOT_URLCONF = 'project.urls'
+WSGI_APPLICATION = 'project.wsgi.application'
+TIME_ZONE = "America/Denver"
 
 # Application definition
 
@@ -41,7 +34,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
     'pokemon',
 )
@@ -66,10 +58,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
 )
 
-ROOT_URLCONF = 'project.urls'
-
-WSGI_APPLICATION = 'project.wsgi.application'
-
 TEMPLATE_DIRS = (
     os.path.join(DIRNAME, '..', 'templates'),
 )
@@ -83,52 +71,18 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-
-# Database
+# Database Settings
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+# See production and development modules for DATABASES.
 
 DATABASE_NAME = "pokeapi"
 DATABASE_PASSWORD = "TuTKaAUjuSqJvtNJ"
 DATABASE_USER = "pokeapi"
-DEFAULT_CONTACT_EMAIL = "Ridley Larsen <ridley@velocitywebworks.com>"
-DEFAULT_FROM_EMAIL = "Ridley Larsen <ridley@velocitywebworks.com>"
-SECRET_KEY = "m5%7opq42mrqqg7&1f735py%8+usu=7t#1beu-714k)vf7+vy@"
-TIME_ZONE = "America/Denver"
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': DATABASE_NAME,
-        'USER': DATABASE_USER,
-        'PASSWORD': DATABASE_PASSWORD,
-        'HOST': '10.0.0.254',
-        'PORT': '',
-    }
-}
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django',
-        'USER': 'django',
-        'PASSWORD': '6kUBGGKcYB',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+DATABASES = {}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
-
-STATIC_URL = '/static/'

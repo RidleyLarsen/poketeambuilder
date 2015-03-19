@@ -21,6 +21,17 @@ class MoveSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', )
 
 
+class BasicPokemonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pokemon
+        fields = (
+            'name',
+            'types',
+            # 'sprite_img',
+            'national_id',
+        )
+
+
 class PokemonSerializer(serializers.ModelSerializer):
     # types = TypeSerializer()
     # moves = MoveSerializer()

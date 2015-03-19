@@ -2,7 +2,7 @@ from django.views.generic import ListView
 from rest_framework import viewsets
 
 from .models import Pokemon, Type
-from .serializers import PokemonSerializer, TypeSerializer
+from .serializers import BasicPokemonSerializer, TypeSerializer
 
 
 class PokemonListView(ListView):
@@ -13,7 +13,7 @@ class PokemonListView(ListView):
 
 
 class PokemonViewset(viewsets.ModelViewSet):
-    serializer_class = PokemonSerializer
+    serializer_class = BasicPokemonSerializer
     queryset = Pokemon.objects.filter(national_id__lte=900).order_by('national_id')
 
     class Meta:
