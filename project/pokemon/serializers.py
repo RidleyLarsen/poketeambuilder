@@ -27,7 +27,7 @@ class BasicPokemonSerializer(serializers.ModelSerializer):
         fields = (
             'name',
             'types',
-            # 'sprite_img',
+            'sprite_img',
             'national_id',
         )
 
