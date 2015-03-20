@@ -1,6 +1,6 @@
 from django.views.generic import ListView
 from django.core.cache import cache
-from django.http import HttpResponse
+from django.http import JsonResponse
 
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
@@ -27,7 +27,7 @@ class PokemonViewset(viewsets.ModelViewSet):
             pkmn_serializer = BasicPokemonSerializer(allpkmn, many=True)
             json_data = JSONRenderer().render(pkmn_serializer.data)
             cache.set('allpkmn', json_data)
-        return HttpResponse(allpkmn)
+        return JsonResponse(allpkmn)
 
     class Meta:
         model = Pokemon
