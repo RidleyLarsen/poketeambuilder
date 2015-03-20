@@ -3,3 +3,6 @@ djangorestframework
 markdown
 django-filter
 dj-static
+django-redis
+psycopg2
+ipython

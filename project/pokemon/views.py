@@ -23,10 +23,11 @@ class PokemonViewset(viewsets.ModelViewSet):
     def list(self, request):
         allpkmn = cache.get('allpkmn')
         if not allpkmn:
-            allpkmn = Pokemon.objects.filter(national_id__lte=900).order_by('national_id')
+            allpkmn = Pokemon.objects.filter(national_id__lte=50).order_by('national_id')
             pkmn_serializer = BasicPokemonSerializer(allpkmn, many=True)
             json_data = JSONRenderer().render(pkmn_serializer.data)
             cache.set('allpkmn', json_data)
+            allpkmn = json_data
         return HttpResponse(allpkmn)
 
     class Meta:
